@@ -23,13 +23,13 @@ appRouter.use(cors(corsOptions)); // доступ для других домен
 
 appRouter.use(helmet());
 
+// логгер запросов
+appRouter.use(requestLogger);
+
 appRouter.use(limiter);
 
 appRouter.use(bodyParser.json());
 appRouter.use(bodyParser.urlencoded({ extended: true }));
-
-// логгер запросов
-appRouter.use(requestLogger);
 
 appRouter.use('/users', userRouter);
 appRouter.use('/movies', movieRouter);
@@ -45,3 +45,4 @@ appRouter.use(errorLogger);
 
 appRouter.use(errors());
 appRouter.use(errorHandler);
+module.exports = appRouter;

@@ -40,9 +40,9 @@ const registerUser = (req, res, next) => {
       });
     }).catch((err) => {
       if (err.code === 11000) {
-        next(new EmailExistenceError('Даный email уже зарегистрирован'));
+        next(new EmailExistenceError('Пользователь с таким email уже существует'));
       } else if (err.name === 'ValidationError') {
-        return next(new RequestError('Переданы некорректные данные'));
+        return next(new RequestError('Переданы некорректные данные пользователя'));
       } else {
         return next(err);
       }
@@ -65,6 +65,8 @@ const updateUserData = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new RequestError('Переданы некорректные данные пользователя'));
+      } else if (err.code === 11000) {
+        next(new EmailExistenceError('Пользователь с таким email уже существует'));
       } else {
         return next(err);
       }

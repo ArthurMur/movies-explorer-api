@@ -48,7 +48,7 @@ const createMovie = (req, res, next) => {
       if (err.name === 'ValidationError') {
         next(
           new RequestError(
-            'Переданы некорректные данные при создании карточки фильма',
+            'Переданы некорректные данные при создании фильма',
           ),
         );
       } else {

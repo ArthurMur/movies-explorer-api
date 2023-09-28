@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const isURL = require('validator/lib/isURL');
+const validator = require('validator');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -26,7 +26,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v) => isURL(v),
+      validator: (url) => validator.isURL(url, { require_protocol: true }),
       message: 'Неправильный формат ссылки',
     },
   }, // ссылка на постер к фильму. Обязательное поле-строка. Запишите её URL-адресом.
@@ -34,7 +34,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v) => isURL(v),
+      validator: (url) => validator.isURL(url, { require_protocol: true }),
       message: 'Неправильный формат ссылки',
     },
   }, // ссылка на трейлер фильма. Обязательное поле-строка. Запишите её URL-адресом.
@@ -42,7 +42,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v) => isURL(v),
+      validator: (url) => validator.isURL(url, { require_protocol: true }),
       message: 'Неправильный формат ссылки',
     },
   }, // миниатюрное изображение постера к фильму. Обязательное поле-строка. Запишите её URL-адресом.

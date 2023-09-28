@@ -1,15 +1,16 @@
 const helmet = require('helmet');
-const { rateLimit } = require('express-rate-limit');
 const appRouter = require('express').Router();
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
+const limiter = require('../utils/limiterConfig');
 const userRouter = require('./users');
 const movieRouter = require('./movies');
 const signinRouter = require('./signin');
 const signupRouter = require('./signup');
 const errorHandler = require('../middlewares/error-handler');
 const NotFoundError = require('../errors/notFoundError');
+const auth = require('../middlewares/auth');
 
 const { requestLogger, errorLogger } = require('../middlewares/logger'); // логгеры
 
@@ -21,14 +22,6 @@ const corsOptions = {
 appRouter.use(cors(corsOptions)); // доступ для других доменов
 
 appRouter.use(helmet());
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-  standardHeaders: 'draft-7', // draft-6: RateLimit-* headers; draft-7: combined RateLimit header
-  legacyHeaders: false, // X-RateLimit-* headers
-  // store: ... , // Use an external store for more precise rate limiting
-});
 
 appRouter.use(limiter);
 
@@ -43,7 +36,7 @@ appRouter.use('/movies', movieRouter);
 appRouter.use('/signup', signupRouter);
 appRouter.use('/signin', signinRouter);
 
-appRouter.use((req, res, next) => {
+appRouter.use('*', auth, (req, res, next) => {
   next(new NotFoundError('Путь не найден'));
 });
 

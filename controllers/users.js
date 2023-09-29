@@ -51,8 +51,8 @@ const registerUser = (req, res, next) => {
 
 // Обновление профиля пользователя
 const updateUserData = (req, res, next) => {
-  const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, {
+  const { name, email } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name, email }, {
     new: true,
     runValidators: true,
   })
